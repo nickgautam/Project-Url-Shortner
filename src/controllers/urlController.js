@@ -19,8 +19,8 @@ const createUrl = async function(req,res){
     return res.status(400).send({status: false , message: "Url is invalid"})
    }
  
-        let urlDecodedCode = shortid.generate(data)
-        let shortDecodedUrl = "https://localhost:3000/"+urlDecodedCode
+        let urlDecodedCode = shortid.generate()
+        let shortDecodedUrl = "http://localhost:3000/"+urlDecodedCode
         data.shortUrl = shortDecodedUrl
         data['urlCode'] = urlDecodedCode
         let result = await urlModel.create(data)
@@ -34,10 +34,9 @@ const createUrl = async function(req,res){
    
 const getUrl = async function(req,res){
 
+  try { 
     let code = req.params.urlCode
-    if(!code){
-        return res.status(400).send({status:false, message: "Please provide urlCode"})
-    }
+
     if(!shortid.isValid(code)){
         return res.status(400).send({status:false,msg:"Invalid Code"})
     }
@@ -46,7 +45,11 @@ const getUrl = async function(req,res){
         return res.status(404).send({status:false,message:"No Url Found"})
     }
 
-    res.status(302).send("Redirect to " + getLongUrl.longUrl.toString())
+     res.status(302).send("Redirect to " + getLongUrl.longUrl)
+}
+catch(err){
+    return res.status(500).send({status:false,message:err.message})
+}
 
 }
 
