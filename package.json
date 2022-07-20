@@ -5,8 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start":"nodemon src/index.js"
-
+    "start": "nodemon src/index.js"
   },
   "repository": {
     "type": "git",
@@ -18,13 +17,13 @@
     "url": "https://github.com/Mohd-Farhan-9990/project-URL-shortner/issues"
   },
   "homepage": "https://github.com/Mohd-Farhan-9990/project-URL-shortner#readme",
-
-
   "dependencies": {
     "body-parser": "^1.20.0",
     "express": "^4.18.1",
     "mongoose": "^6.4.4",
     "nodemon": "^2.0.19",
-    "shortid": "^2.2.16"
+    "redis": "^3.1.2",
+    "shortid": "^2.2.16",
+    "util": "^0.12.4"
   }
 }
