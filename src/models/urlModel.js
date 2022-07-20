@@ -1,5 +1,4 @@
 const mongoose = require('mongoose')
-const {isValid} = require('shortid')
 
 const urlSchema = new mongoose.Schema({
 
@@ -12,7 +11,6 @@ const urlSchema = new mongoose.Schema({
     longUrl:{
         type:String,
         required:true,
-        isValid:true,
         trim:true
     },
     shortUrl:{
