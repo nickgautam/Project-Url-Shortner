@@ -31,11 +31,6 @@ const createUrl = async function(req,res){
             })
         }
        let urlPattern = /^(http(s)?:\/\/)?(www.)?([a-zA-Z0-9])+([\-\.]{1}[a-zA-Z0-9]+)*\.[a-zA-Z]{2,5}(:[0-9]{1,5})?(\/[^\s]*)?$/
- 
-        let longExist = await urlModel.findOne({longUrl:data.longUrl})
-        if(longExist){
-            return res.status(400).send({status: false , message: "Short Url is already generated with this longUrl"})
-        }
 
    if (!urlPattern.test(data.longUrl)){
     return res.status(400).send({status: false , message: "Url is invalid"})
@@ -48,6 +43,7 @@ const createUrl = async function(req,res){
         data['urlCode'] = urlDecodedCode
         let result = await urlModel.create(data)
         return res.status(201).send({status:true, data:result})
+
     }
     catch(err){
         return res.status(500).send({status:false,message:err.message})
@@ -59,15 +55,16 @@ const getUrl = async function(req,res){
 try{
         let urlCode = req.params.urlCode
         let cacheData = await GET_ASYNC(`${urlCode}`)
+        console.log(cacheData)
         if(cacheData){
-            res.status(302).redirect(JSON.parse(cacheData).longUrl)
+            res.status(302).redirect(cacheData)
         }
         else{
         let getLongUrl = await urlModel.findOne({urlCode:urlCode}).select({_id:0,longUrl:1})
         if(!getLongUrl){
-            return res.status(404).send({status:false,message:"No Url Found"})
+            return res.status(404).send({status:false,message:"No data Found"})
         }
-        await SET_ASYNC(`${urlCode}`, JSON.stringify(getLongUrl))
+        await SET_ASYNC(`${urlCode}`, getLongUrl.longUrl)
          res.status(302).redirect( getLongUrl.longUrl)
     }
     }
