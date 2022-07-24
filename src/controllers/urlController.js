@@ -1,4 +1,3 @@
-const mongoose = require("mongoose")
 const urlModel = require("../models/urlModel")
 const shortid = require('shortid')
 const redis = require("redis")
@@ -9,9 +8,9 @@ const redisClient = redis.createClient(
     "redis-14466.c212.ap-south-1-1.ec2.cloud.redislabs.com",
     {no_ready_check:true}
 );
-redisClient.auth("v9SR3Gkk4N0vCW1Yk8XWfyeQFk2LYcfp",function(err){
+redisClient.auth("v9SR3Gkk4N0vCW1Yk8XWfyeQFk2LYcfp",function(err){ 
     if(err)throw err
-});
+});                                  
 
 redisClient.on("connect",async function(){
     console.log("Redis Is connected")
@@ -25,7 +24,7 @@ const createUrl = async function(req,res){
     try{
             let data = req.body
 
-            if(Object.keys(data).length==0){
+            if(Object.keys(data).length==0){ //[]===>{}
                 return res.status(400).send({
                     status: false, 
                     message: "Request body can't be empty"
@@ -37,7 +36,7 @@ const createUrl = async function(req,res){
             }
 
             let cacheUrl = await GET_ASYNC(`${data.longUrl}`)
-            if(cacheUrl){
+            if(cacheUrl){ 
                 console.log("From cache")
                return res.status(201).send({status:true,data:JSON.parse(cacheUrl)})
             }
@@ -55,10 +54,10 @@ const createUrl = async function(req,res){
                     }
                    
                 
-                let urlDecodedCode = shortid.generate().toLowerCase()
-                let shortDecodedUrl = "http://localhost:3000/"+urlDecodedCode
-                data.shortUrl = shortDecodedUrl
-                data['urlCode'] = urlDecodedCode
+                let urlCode1 = shortid.generate().toLowerCase()
+                let shortUrl1 = "http://localhost:3000/"+urlCode1
+                data.shortUrl = shortUrl1
+                data['urlCode'] = urlCode1
                 let result = await urlModel.create(data)
                 let res1 = {
                     urlCode:result.urlCode,
